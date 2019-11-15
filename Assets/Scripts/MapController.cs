@@ -7,7 +7,8 @@ public class MapController : MonoBehaviour
 {
     public SnakeController snakeController;
     public RectTransform gridMap;
-    MapCell[,] tiles = new MapCell[16,16];
+    public static int SIZE = 16;
+    MapCell[,] tiles = new MapCell[SIZE,SIZE];
 
     public Sprite groundSprite;
     public Sprite snakeSprite;
@@ -19,8 +20,8 @@ public class MapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < 16*16; i++) {
-            tiles[i%16,i/16] = gridMap.GetChild(i).GetComponent<MapCell>();
+        for (int i = 0; i < SIZE*SIZE; i++) {
+            tiles[i%SIZE,i/SIZE] = gridMap.GetChild(i).GetComponent<MapCell>();
         }
     }
 
@@ -37,8 +38,8 @@ public class MapController : MonoBehaviour
     public void ResetFood()
     {
         List<Point> options = new List<Point>();
-        for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
                 if (!snakeController.snake.InBody(x,y)) options.Add(new Point(x,y));
             }
         }

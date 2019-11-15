@@ -29,4 +29,15 @@ public class Snake
         foreach (Point p in body) if (p.Equals(x,y)) return true;
         return false;
     }
+
+    public bool CollidingWithBody(int x, int y)
+    {
+        foreach (Point p in body) if (p.Equals(x,y)) return true;
+        return false;
+    }
+
+    public bool CollidingWithBody(Point point)
+    {
+        return CollidingWithBody(point.x,point.y);
+    }
 }

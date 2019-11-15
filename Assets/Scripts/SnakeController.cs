@@ -5,6 +5,7 @@ using UnityEngine;
 public class SnakeController : MonoBehaviour
 {
     public MapController mapController;
+    public GameController gameController;
     
     public Snake snake;
     Vector2Int direction = Vector2Int.up;
@@ -28,8 +29,14 @@ public class SnakeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        snake = new Snake(Random.Range(2,6),Random.Range(2,6));
+        ResetSnake();
         mapController.UpdateMap();
+    }
+
+    public void ResetSnake()
+    {
+        int n = 3;
+        snake = new Snake(Random.Range(n,MapController.SIZE-n),Random.Range(n,MapController.SIZE-n));
     }
 
     // Update is called once per frame
@@ -38,7 +45,7 @@ public class SnakeController : MonoBehaviour
         bool found = false;
         for (int i = 0; i < 4; i++) {
             foreach (KeyCode kc in keys[i]) {
-                if (Input.GetKeyDown(kc)) {
+                if (Input.GetKeyDown(kc) && IsValidDirection(directions[i])) {
                     direction = directions[i];
                     found = true;
                     break;
@@ -57,8 +64,22 @@ public class SnakeController : MonoBehaviour
             else {
                 snake.Move(direction.x,direction.y);
             }
+
+            // check if collided with anything
+            if (snake.CollidingWithBody(snake.head) || snake.head.x < 0 || snake.head.y < 0
+            || snake.head.x >= MapController.SIZE || snake.head.y >= MapController.SIZE) {
+                gameController.GameOver();
+                return;
+            }
+
             timer = 0f;
             mapController.UpdateMap();
+
         }
+    }
+
+    bool IsValidDirection(Vector2Int dir)
+    {
+        return dir.x != direction.x && dir.y != direction.y;
     }
 }
