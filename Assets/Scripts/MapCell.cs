@@ -15,6 +15,12 @@ public class MapCell : MonoBehaviour
 
     public void UpdateImage(Sprite sprite)
     {
+        image.color = Color.white;
         image.sprite = sprite;
+    }
+
+    public void HideTile()
+    {
+        image.color = new Color(1f,1f,1f,0f);
     }
 }

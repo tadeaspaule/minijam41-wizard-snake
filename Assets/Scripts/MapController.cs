@@ -48,7 +48,7 @@ public class MapController : MonoBehaviour
 
     public void UpdateMap()
     {
-        foreach (MapCell mc in tiles) mc.UpdateImage(groundSprite);
+        foreach (MapCell mc in tiles) mc.HideTile();
         foreach (Point p in snakeController.snake.body) {
             tiles[p.x,p.y].UpdateImage(snakeSprite);
         }

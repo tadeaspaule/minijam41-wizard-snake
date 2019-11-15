@@ -60,6 +60,7 @@ public class SnakeController : MonoBehaviour
                 // ate food
                 snake.Move(direction.x,direction.y,false);
                 mapController.ResetFood();
+                gameController.AteFood();
             }
             else {
                 snake.Move(direction.x,direction.y);
