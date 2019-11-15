@@ -9,11 +9,25 @@ public class MapCell : MonoBehaviour
     bool animated = false;
     Sprite[] frames;
     int frameI = 0;
+
+    float timer = 0f;
+    float timerStep = 1f / 6f;
     
     // Start is called before the first frame update
     void Start()
     {
         image = GetComponent<Image>();
+    }
+
+    void Update()
+    {
+        if (!animated) return;
+        timer += Time.deltaTime;
+        if (timer >= timerStep) {
+            timer = 0f;
+            frameI = (frameI+1) % frames.Length;
+            image.sprite = frames[frameI];
+        }
     }
 
     public void UpdateImage(Sprite sprite)
@@ -39,6 +53,8 @@ public class MapCell : MonoBehaviour
         animated = true;
         frames = Resources.LoadAll<Sprite>("food");
         frameI = 0;
+        image.sprite = frames[0];
+        timer = 0f;
     }
 
     void ResetBasics()

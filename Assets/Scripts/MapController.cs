@@ -10,9 +10,6 @@ public class MapController : MonoBehaviour
     public static int SIZE = 16;
     MapCell[,] tiles = new MapCell[SIZE,SIZE];
 
-    public Sprite groundSprite;
-    public Sprite snakeSprite;
-
     public Point food = null;
     float timer = 0f;
     float foodTimer = 1f;
@@ -44,23 +41,16 @@ public class MapController : MonoBehaviour
             }
         }
         food = options[Random.Range(0,options.Count)];
+        tiles[food.x,food.y].SetAsFood();
     }
 
     public void UpdateMap()
     {
-        // foreach (MapCell mc in tiles) mc.HideTile();
-        // foreach (Point p in snakeController.snake.body) {
-        //     tiles[p.x,p.y].UpdateImage(snakeSprite);
-        // }
-        // tiles[snakeController.snake.head.x,snakeController.snake.head.y].UpdateImage(snakeSprite);
         for (int y = 0; y < SIZE; y++) {
             for (int x = 0; x < SIZE; x++) {
-                if (!snakeController.snake.InBody(x,y)) tiles[x,y].HideTile();
+                if (!snakeController.snake.InBody(x,y) && (food == null || !food.Equals(x,y))) tiles[x,y].HideTile();
             }
         }
-
-        
-        if (food != null) tiles[food.x,food.y].UpdateImage(snakeSprite);
     }
 
     public void SetTile(int x, int y, Sprite sprite, int yRotation, int zRotation)
