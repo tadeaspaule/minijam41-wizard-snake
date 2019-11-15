@@ -11,10 +11,22 @@ public class Snake
         head = new Point(x,y);
     }
 
-    public void Move(int xMove, int yMove)
+    public void Move(int xMove, int yMove, bool removeLast)
     {
         body.Insert(0,head);
-        body.RemoveAt(body.Count-1);
+        if (removeLast) body.RemoveAt(body.Count-1);
         head = new Point(head.x+xMove,head.y+yMove);
+    }
+
+    public void Move(int xMove, int yMove)
+    {
+        Move(xMove,yMove,true);
+    }
+
+    public bool InBody(int x, int y)
+    {
+        if (head.Equals(x,y)) return true;
+        foreach (Point p in body) if (p.Equals(x,y)) return true;
+        return false;
     }
 }

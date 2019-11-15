@@ -11,6 +11,10 @@ public class MapController : MonoBehaviour
 
     public Sprite groundSprite;
     public Sprite snakeSprite;
+
+    public Point food = null;
+    float timer = 0f;
+    float foodTimer = 1f;
     
     // Start is called before the first frame update
     void Start()
@@ -20,6 +24,27 @@ public class MapController : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer >= foodTimer) {
+            timer = 0f;
+            if (food != null) return;
+            ResetFood();
+        }
+    }
+
+    public void ResetFood()
+    {
+        List<Point> options = new List<Point>();
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                if (!snakeController.snake.InBody(x,y)) options.Add(new Point(x,y));
+            }
+        }
+        food = options[Random.Range(0,options.Count)];
+    }
+
     public void UpdateMap()
     {
         foreach (MapCell mc in tiles) mc.UpdateImage(groundSprite);
@@ -27,5 +52,8 @@ public class MapController : MonoBehaviour
             tiles[p.x,p.y].UpdateImage(snakeSprite);
         }
         tiles[snakeController.snake.head.x,snakeController.snake.head.y].UpdateImage(snakeSprite);
+
+        
+        tiles[food.x,food.y].UpdateImage(snakeSprite);
     }
 }

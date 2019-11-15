@@ -49,7 +49,14 @@ public class SnakeController : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= moveTimer) {
             // move
-            snake.Move(direction.x,direction.y);
+            if (mapController.food.Equals(snake.head.x+direction.x,snake.head.y+direction.y)) {
+                // ate food
+                snake.Move(direction.x,direction.y,false);
+                mapController.ResetFood();
+            }
+            else {
+                snake.Move(direction.x,direction.y);
+            }
             timer = 0f;
             mapController.UpdateMap();
         }
