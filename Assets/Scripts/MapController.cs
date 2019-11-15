@@ -87,7 +87,8 @@ public class MapController : MonoBehaviour
             spellTimer = 0f;
             spell = GetUnoccupiedSpot();
             placedSpell = Spell.GetSpell();
-            tiles[spell.x,spell.y].UpdateImage(spellSprite);
+            Sprite sprite = Resources.Load<Sprite>($"spells/{placedSpell.name}");
+            tiles[spell.x,spell.y].UpdateImage(sprite == null ? spellSprite : sprite);
             // TODO can have different sprites / colors for different spells?
         }
     }
