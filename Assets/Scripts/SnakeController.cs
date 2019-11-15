@@ -43,6 +43,7 @@ public class SnakeController : MonoBehaviour
 
     public Sprite snakeStraight;
     public Sprite snakeCorner;
+    public Sprite snakeHead;
 
     #endregion
     
@@ -150,7 +151,7 @@ public class SnakeController : MonoBehaviour
 
             timer = 0f;
             mapController.UpdateMap();
-            mapController.SetTile(snake.head,snakeStraight,snakeColor,0,0);
+            mapController.SetTile(snake.head,snakeHead,snakeColor,0,directionCode*90);
             // update snake body sprites
             if (snake.body.Count > 1 && moves.Count > 2) {
                 SetSnakeBody(moves[0],moves[1],snake.body[0]);

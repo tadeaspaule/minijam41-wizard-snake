@@ -19,13 +19,23 @@ public class GameController : MonoBehaviour
     Color full = Color.white;
     Color half = new Color(1f,1f,1f,0.5f);
     Color transparent = new Color(1f,1f,1f,0f);
+
+    public AnimationClip intro;
     
     void Start()
     {
         highscore = PlayerPrefs.GetInt("highscore",0);
         UpdateScore();
         UpdateSpellText();
+        StartCoroutine(AfterIntroFinishes());
+    }
+
+    IEnumerator AfterIntroFinishes()
+    {
+        yield return new WaitForSeconds(intro.averageDuration);
+        mapController.disabled = false;
         StartCoroutine(mapController.DelayedSpellSpawn(1f));
+        snakeController.gameObject.SetActive(true);
     }
 
     public void GameOver()

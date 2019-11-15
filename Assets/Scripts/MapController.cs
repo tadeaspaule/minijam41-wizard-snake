@@ -19,6 +19,8 @@ public class MapController : MonoBehaviour
     float spellTimer = 0f;
     float spellTimerCap = 5f;
     public Sprite spellSprite;
+
+    public bool disabled = true;
     
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,7 @@ public class MapController : MonoBehaviour
 
     void Update()
     {
+        if (disabled) return;
         timer += Time.deltaTime;
         if (timer >= foodTimer) {
             timer = 0f;
