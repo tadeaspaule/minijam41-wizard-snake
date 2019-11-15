@@ -101,14 +101,20 @@ public class MapController : MonoBehaviour
         }
     }
 
-    public void SetTile(int x, int y, Sprite sprite, int yRotation, int zRotation)
+    public void SetTile(int x, int y, Sprite sprite, Color color, int yRotation, int zRotation)
     {
         tiles[x,y].UpdateImage(sprite);
         tiles[x,y].RotateImage(yRotation,zRotation);
+        tiles[x,y].SetColor(color);
     }
 
-    public void SetTile(Point p, Sprite sprite, int yRotation, int zRotation)
+    public void SetTile(Point p, Sprite sprite, Color color, int yRotation, int zRotation)
     {
-        SetTile(p.x,p.y,sprite,yRotation,zRotation);
+        SetTile(p.x,p.y,sprite,color, yRotation,zRotation);
+    }
+
+    public void SetTileColor(Point point, Color color)
+    {
+        tiles[point.x,point.y].SetColor(color);
     }
 }

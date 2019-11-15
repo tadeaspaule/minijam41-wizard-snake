@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour
 
     int score = 0;
     int highscore = 0;
-    Spell holdingSpell = null;
+    public Spell holdingSpell = null;
 
     Color full = Color.white;
     Color half = new Color(1f,1f,1f,0.5f);
@@ -60,6 +60,12 @@ public class GameController : MonoBehaviour
         score -= holdingSpell.cost;
         holdingSpell = null;
         UpdateSpellText();
+    }
+
+    public bool CanUseSpell()
+    {
+        if (holdingSpell == null) return false;
+        return score >= holdingSpell.cost;
     }
 
     void UpdateSpellText()

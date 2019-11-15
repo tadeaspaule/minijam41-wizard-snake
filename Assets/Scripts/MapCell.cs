@@ -38,6 +38,11 @@ public class MapCell : MonoBehaviour
         image.sprite = sprite;
     }
 
+    public void SetColor(Color color)
+    {
+        image.color = color;
+    }
+
     public void HideTile()
     {
         ResetBasics();

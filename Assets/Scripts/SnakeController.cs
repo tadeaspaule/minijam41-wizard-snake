@@ -14,6 +14,8 @@ public class SnakeController : MonoBehaviour
     float timer = 0f;
     float moveTimer = 0.2f;
 
+    Color snakeColor = Color.white;
+
     #region Movement vars
 
     KeyCode[][] keys = new KeyCode[][]{
@@ -44,6 +46,14 @@ public class SnakeController : MonoBehaviour
 
     #endregion
     
+    #region Spells
+
+    public int activeEffect = -1;
+    public static int GHOST = 0;
+
+
+    #endregion
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -61,9 +71,30 @@ public class SnakeController : MonoBehaviour
         moves.Add(directionCode);
     }
 
+    void HandleSpellUse()
+    {
+        string spell = gameController.holdingSpell.name;
+        if (spell.Equals("ghost")) {
+            activeEffect = GHOST;
+            snakeColor = new Color(1f,1f,1f,0.5f);
+            UpdateSnakeColor();
+        }
+    }
+
+    void UpdateSnakeColor()
+    {
+        mapController.SetTileColor(snake.head,snakeColor);
+        foreach (Point p in snake.body) mapController.SetTileColor(p,snakeColor);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space) && gameController.CanUseSpell()) {
+            HandleSpellUse();
+            gameController.UsedSpell();
+        }
+
         bool found = false;
         for (int i = 0; i < 4; i++) {
             foreach (KeyCode kc in keys[i]) {
@@ -93,8 +124,21 @@ public class SnakeController : MonoBehaviour
             }
 
             // check if collided with anything
-            if (snake.CollidingWithBody(snake.head) || snake.head.x < 0 || snake.head.y < 0
+            if (snake.head.x < 0 || snake.head.y < 0
             || snake.head.x >= MapController.SIZE || snake.head.y >= MapController.SIZE) {
+                if (activeEffect == GHOST) {
+                    snake.head.ResetToWithinBounds(MapController.SIZE);
+                    activeEffect = -1; // used up the effect
+                    snakeColor = Color.white;
+                    UpdateSnakeColor();
+                }
+                else {
+                    gameController.GameOver();
+                    return;
+                }
+            }
+
+            if (snake.CollidingWithBody(snake.head)) {
                 gameController.GameOver();
                 return;
             }
@@ -106,14 +150,14 @@ public class SnakeController : MonoBehaviour
 
             timer = 0f;
             mapController.UpdateMap();
-            mapController.SetTile(snake.head.x,snake.head.y,snakeStraight,0,0);
+            mapController.SetTile(snake.head,snakeStraight,snakeColor,0,0);
             // update snake body sprites
             if (snake.body.Count > 1 && moves.Count > 2) {
                 SetSnakeBody(moves[0],moves[1],snake.body[0]);
                 SetSnakeBody(moves[1],moves[2],snake.body[1]);
             }
             else if (snake.body.Count > 0) {
-                mapController.SetTile(snake.body[0],snakeStraight,0,directionCode*90);
+                mapController.SetTile(snake.body[0],snakeStraight,snakeColor,0,directionCode*90);
             }
 
         }
@@ -177,6 +221,6 @@ public class SnakeController : MonoBehaviour
             yDeg = 180;
             zDeg = 270;
         }
-        mapController.SetTile(point.x,point.y,sprite,yDeg,zDeg);
+        mapController.SetTile(point,sprite,snakeColor,yDeg,zDeg);
     }
 }

@@ -19,4 +19,12 @@ public class Point
         if (p == null) return false;
         return this.x == p.x && this.y == p.y;
     }
+
+    public void ResetToWithinBounds(int bound)
+    {
+        if (x < 0) x += bound;
+        if (y < 0) y += bound;
+        if (x >= bound) x -= bound;
+        if (y >= bound) y -= bound;
+    }
 }
