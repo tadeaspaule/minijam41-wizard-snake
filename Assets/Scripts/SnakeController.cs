@@ -99,6 +99,11 @@ public class SnakeController : MonoBehaviour
                 return;
             }
 
+            // check if picked up spell
+            if (snake.head.Equals(mapController.spell)) {
+                gameController.PickedUpSpell(mapController.placedSpell);
+            }
+
             timer = 0f;
             mapController.UpdateMap();
             mapController.SetTile(snake.head.x,snake.head.y,snakeStraight,0,0);

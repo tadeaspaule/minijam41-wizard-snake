@@ -24236,6 +24236,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: spellText
       objectReference: {fileID: 0}
+    - target: {fileID: 983192865673857475, guid: 7b65de93364d3894bb541e6561ea4e0d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1401868696353930165, guid: 7b65de93364d3894bb541e6561ea4e0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27586,6 +27591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   snakeController: {fileID: 1417927321}
   gridMap: {fileID: 1164613524}
+  spellSprite: {fileID: 21300000, guid: 8c737849d6e8eec43a5da537ce1204c3, type: 3}
 --- !u!4 &1770587462
 Transform:
   m_ObjectHideFlags: 0

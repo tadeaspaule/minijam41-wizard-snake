@@ -13,6 +13,12 @@ public class MapController : MonoBehaviour
     public Point food = null;
     float timer = 0f;
     float foodTimer = 1f;
+
+    public Point spell = null;
+    public Spell placedSpell = null;
+    float spellTimer = 0f;
+    float spellTimerCap = 5f;
+    public Sprite spellSprite;
     
     // Start is called before the first frame update
     void Start()
@@ -30,25 +36,67 @@ public class MapController : MonoBehaviour
             if (food != null) return;
             ResetFood();
         }
+
+        if (spell != null) {
+            // spell is placed, tick timer until it disappears
+            spellTimer += Time.deltaTime;
+            if (spellTimer >= spellTimerCap) {
+                tiles[spell.x,spell.y].HideTile();
+                spell = null;
+                placedSpell = null;
+                StartCoroutine(DelayedSpellSpawn(2f));
+            }
+        }
     }
 
-    public void ResetFood()
+    Point GetUnoccupiedSpot()
     {
         List<Point> options = new List<Point>();
         for (int y = 0; y < SIZE; y++) {
             for (int x = 0; x < SIZE; x++) {
-                if (!snakeController.snake.InBody(x,y)) options.Add(new Point(x,y));
+                if (IsTileEmpty(x,y)) options.Add(new Point(x,y));
             }
         }
-        food = options[Random.Range(0,options.Count)];
+        return options[Random.Range(0,options.Count)];
+    }
+
+    bool IsTileEmpty(int x, int y)
+    {
+        return (!snakeController.snake.InBody(x,y)
+                && !tiles[x,y].isCollider
+                && (food == null || !food.Equals(x,y))
+                && (spell == null || !spell.Equals(x,y)));
+    }
+
+    public void ResetFood()
+    {
+        food = GetUnoccupiedSpot();
         tiles[food.x,food.y].SetAsFood();
+    }
+
+    public IEnumerator DelayedSpellSpawn(float delay)
+    {
+        if (spell != null) {
+            // have to reset spell vars
+            tiles[spell.x,spell.y].HideTile();
+            spell = null;
+            placedSpell = null;
+        }
+        yield return new WaitForSeconds(delay);
+        if (spell == null) {
+            spellTimer = 0f;
+            spell = GetUnoccupiedSpot();
+            placedSpell = Spell.GetSpell();
+            tiles[spell.x,spell.y].UpdateImage(spellSprite);
+            // TODO can have different sprites / colors for different spells?
+        }
     }
 
     public void UpdateMap()
     {
         for (int y = 0; y < SIZE; y++) {
             for (int x = 0; x < SIZE; x++) {
-                if (!snakeController.snake.InBody(x,y) && (food == null || !food.Equals(x,y))) tiles[x,y].HideTile();
+                if (IsTileEmpty(x,y)) tiles[x,y].HideTile();
             }
         }
     }

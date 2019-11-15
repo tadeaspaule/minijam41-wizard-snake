@@ -14,12 +14,18 @@ public class GameController : MonoBehaviour
 
     int score = 0;
     int highscore = 0;
-    string holdingSpell = null;
+    Spell holdingSpell = null;
+
+    Color full = Color.white;
+    Color half = new Color(1f,1f,1f,0.5f);
+    Color transparent = new Color(1f,1f,1f,0f);
     
     void Start()
     {
         highscore = PlayerPrefs.GetInt("highscore",0);
         UpdateScore();
+        UpdateSpellText();
+        StartCoroutine(mapController.DelayedSpellSpawn(1f));
     }
 
     public void GameOver()
@@ -32,6 +38,8 @@ public class GameController : MonoBehaviour
         if (score > highscore) UpdateHighscore();
         score = 0;
         UpdateScore();
+        holdingSpell = null;
+        UpdateSpellText();
     }
 
     public void AteFood()
@@ -40,21 +48,34 @@ public class GameController : MonoBehaviour
         UpdateScore();
     }
 
-    public void PickedUpSpell(string spell)
+    public void PickedUpSpell(Spell spell)
     {
-        spellText.gameObject.SetActive(true);
-        int cost = 5;
-        spellText.text = $"{spell} ({cost})";
         holdingSpell = spell;
-        if (score >= cost) spellText.color = Color.white;
-        else spellText.color = new Color(1f,1f,1f,0f);
+        UpdateSpellText();
+        StartCoroutine(mapController.DelayedSpellSpawn(5f));
     }
 
     public void UsedSpell()
     {
-        score -= 5;
+        score -= holdingSpell.cost;
         holdingSpell = null;
-        spellText.gameObject.SetActive(false);
+        UpdateSpellText();
+    }
+
+    void UpdateSpellText()
+    {
+        if (holdingSpell == null) {
+            spellText.color = transparent;
+            return;
+        }
+        if (score >= holdingSpell.cost) {
+            spellText.color = Color.white;
+            spellText.text = $"{holdingSpell.name} ({holdingSpell.cost})";
+        }
+        else {
+            spellText.color = half;
+            spellText.text = $"{holdingSpell.name} ({holdingSpell.cost})";
+        }
     }
     
     void UpdateScore()
@@ -63,8 +84,7 @@ public class GameController : MonoBehaviour
         highscoreText.text = highscore.ToString();
         if (holdingSpell == null) return;
         // possibly makes spell available if enough score
-        if (score >= 5) spellText.color = Color.white;
-        else spellText.color = new Color(1f,1f,1f,0f);
+        UpdateSpellText();
     }
 
     void UpdateHighscore()

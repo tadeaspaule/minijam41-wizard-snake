@@ -13,4 +13,10 @@ public class Point
     {
         return this.x == x && this.y == y;
     }
+
+    public bool Equals(Point p)
+    {
+        if (p == null) return false;
+        return this.x == p.x && this.y == p.y;
+    }
 }

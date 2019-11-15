@@ -12,6 +12,8 @@ public class MapCell : MonoBehaviour
 
     float timer = 0f;
     float timerStep = 1f / 6f;
+
+    public bool isCollider = false;
     
     // Start is called before the first frame update
     void Start()
@@ -38,7 +40,7 @@ public class MapCell : MonoBehaviour
 
     public void HideTile()
     {
-        animated = false;
+        ResetBasics();
         image.color = new Color(1f,1f,1f,0f);
     }
 
@@ -57,10 +59,17 @@ public class MapCell : MonoBehaviour
         timer = 0f;
     }
 
+    public void PlaceWall()
+    {
+        ResetBasics();
+        isCollider = true;
+    }
+
     void ResetBasics()
     {
         image.color = Color.white;
         transform.rotation = Quaternion.identity;
         animated = false;
+        isCollider = false;
     }
 }
