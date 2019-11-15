@@ -9,6 +9,7 @@ public class SnakeController : MonoBehaviour
     
     public Snake snake;
     Vector2Int direction = Vector2Int.up;
+    Vector2Int lastDirection = Vector2Int.up;
 
     float timer = 0f;
     float moveTimer = 0.2f;
@@ -77,6 +78,7 @@ public class SnakeController : MonoBehaviour
         }
         timer += Time.deltaTime;
         if (timer >= moveTimer) {
+            lastDirection = direction;
             moves.Insert(0,directionCode);
             // move
             if (mapController.food != null && mapController.food.Equals(snake.head.x+direction.x,snake.head.y+direction.y)) {
@@ -114,7 +116,7 @@ public class SnakeController : MonoBehaviour
 
     bool IsValidDirection(Vector2Int dir)
     {
-        return dir.x != direction.x && dir.y != direction.y;
+        return dir.x != lastDirection.x && dir.y != lastDirection.y;
     }
 
     void SetSnakeBody(int move, int prevMove, Point point)
