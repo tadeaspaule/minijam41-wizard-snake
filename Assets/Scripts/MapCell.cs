@@ -57,11 +57,12 @@ public class MapCell : MonoBehaviour
     public void SetAsFood()
     {
         ResetBasics();
-        animated = true;
-        frames = Resources.LoadAll<Sprite>("food");
-        frameI = 0;
-        image.sprite = frames[0];
-        timer = 0f;
+        image.sprite = Resources.Load<Sprite>("cookie");
+        // animated = true;
+        // frames = Resources.LoadAll<Sprite>("food");
+        // frameI = 0;
+        // image.sprite = frames[0];
+        // timer = 0f;
     }
 
     public void PlaceWall()
