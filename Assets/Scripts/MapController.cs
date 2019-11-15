@@ -48,13 +48,29 @@ public class MapController : MonoBehaviour
 
     public void UpdateMap()
     {
-        foreach (MapCell mc in tiles) mc.HideTile();
-        foreach (Point p in snakeController.snake.body) {
-            tiles[p.x,p.y].UpdateImage(snakeSprite);
+        // foreach (MapCell mc in tiles) mc.HideTile();
+        // foreach (Point p in snakeController.snake.body) {
+        //     tiles[p.x,p.y].UpdateImage(snakeSprite);
+        // }
+        // tiles[snakeController.snake.head.x,snakeController.snake.head.y].UpdateImage(snakeSprite);
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                if (!snakeController.snake.InBody(x,y)) tiles[x,y].HideTile();
+            }
         }
-        tiles[snakeController.snake.head.x,snakeController.snake.head.y].UpdateImage(snakeSprite);
 
         
-        tiles[food.x,food.y].UpdateImage(snakeSprite);
+        if (food != null) tiles[food.x,food.y].UpdateImage(snakeSprite);
+    }
+
+    public void SetTile(int x, int y, Sprite sprite, int yRotation, int zRotation)
+    {
+        tiles[x,y].UpdateImage(sprite);
+        tiles[x,y].RotateImage(yRotation,zRotation);
+    }
+
+    public void SetTile(Point p, Sprite sprite, int yRotation, int zRotation)
+    {
+        SetTile(p.x,p.y,sprite,yRotation,zRotation);
     }
 }

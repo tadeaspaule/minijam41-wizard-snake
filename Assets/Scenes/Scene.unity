@@ -8525,7 +8525,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 0}
+  m_BackGroundColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -22087,6 +22087,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapController: {fileID: 1770587461}
   gameController: {fileID: 671118617}
+  snakeStraight: {fileID: 21300000, guid: c0ccb6a21542e1c49a0f37d44c85f8e3, type: 3}
+  snakeCorner: {fileID: 21300000, guid: b34b5069117b2c94da12c1960770ed47, type: 3}
 --- !u!4 &1417927322
 Transform:
   m_ObjectHideFlags: 0
@@ -27460,7 +27462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   snakeController: {fileID: 1417927321}
   gridMap: {fileID: 1164613524}
-  groundSprite: {fileID: 21300000, guid: c0372c8865d21c24090e0df3ebeb469e, type: 3}
+  groundSprite: {fileID: 0}
   snakeSprite: {fileID: 21300000, guid: 7e55aec6aace0a34eac064fbecbfb366, type: 3}
 --- !u!4 &1770587462
 Transform:
@@ -33030,17 +33032,17 @@ PrefabInstance:
     - target: {fileID: 7185796628369733747, guid: 7b65de93364d3894bb541e6561ea4e0d,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7185796628369733747, guid: 7b65de93364d3894bb541e6561ea4e0d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7185796628369733747, guid: 7b65de93364d3894bb541e6561ea4e0d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7185796628369733747, guid: 7b65de93364d3894bb541e6561ea4e0d,
         type: 3}
@@ -33116,6 +33118,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185796628369733756, guid: 7b65de93364d3894bb541e6561ea4e0d,
+        type: 3}
+      propertyPath: m_text
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185796628369733756, guid: 7b65de93364d3894bb541e6561ea4e0d,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b65de93364d3894bb541e6561ea4e0d, type: 3}
