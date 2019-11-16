@@ -27,4 +27,9 @@ public class Point
         if (x >= bound) x -= bound;
         if (y >= bound) y -= bound;
     }
+
+    public bool IsWithinBounds(int bound)
+    {
+        return x >= 0 && x < bound && y >= 0 && y < bound;
+    }
 }

@@ -289,4 +289,10 @@ public class MapController : MonoBehaviour
     {
         traps.RemoveAll(p => p.x == point.x && p.y == point.y);
     }
+
+    public void DestroyWall(Point p)
+    {
+        tempWalls.RemoveAll(tw => tw.x == p.x && tw.y == p.y);
+        permaWalls.RemoveAll(pw => pw.x == p.x && pw.y == p.y);
+    }
 }

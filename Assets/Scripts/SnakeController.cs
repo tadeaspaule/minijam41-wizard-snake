@@ -51,12 +51,15 @@ public class SnakeController : MonoBehaviour
     #region Spells
 
     public int activeEffect = -1;
-    public static int GHOST = 0;
+    const int GHOST = 0;
+    const int RAGE = 1;
 
     const int BLINK_DIST = 5;
     Color BLINK_COL = new Color(0.8f,0.8f,1f,0.5f);
 
     const int SHRINK_COUNT = 3;
+
+    const float RAGE_DURATION = 4f;
 
     #endregion
     
@@ -95,8 +98,10 @@ public class SnakeController : MonoBehaviour
         activeEffect = -1;
         moveTimerExtra = 0f;
         moveMult = 1;
-        snakeColor = Color.white;
-        UpdateSnakeColor();
+        if (!snakeColor.Equals(Color.white)) {
+            snakeColor = Color.white;
+            UpdateSnakeColor();
+        }        
     }
 
     void HandleSpellUse()
@@ -121,6 +126,13 @@ public class SnakeController : MonoBehaviour
             }
             mapController.UpdateMap();
         }
+        else if (spell.Equals("rage")) {
+            activeEffect = RAGE;
+            snakeColor = new Color(1f,0.1f,0f);
+            UpdateSnakeColor();
+            StartCoroutine(ResetActiveEffect(RAGE_DURATION));
+            StartCoroutine(ResetSnakeColor(RAGE_DURATION));
+        }
     }
 
     void HandleTrap(string trap)
@@ -135,6 +147,19 @@ public class SnakeController : MonoBehaviour
             UpdateSnakeColor();
             StartCoroutine(ResetMoveMult());
         }
+    }
+
+    IEnumerator ResetActiveEffect(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        activeEffect = -1;
+    }
+
+    IEnumerator ResetSnakeColor(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        snakeColor = Color.white;
+        UpdateSnakeColor();
     }
 
     IEnumerator ResetMoveTimer()
@@ -210,6 +235,10 @@ public class SnakeController : MonoBehaviour
                     activeEffect = -1; // used up the effect
                     snakeColor = Color.white;
                     UpdateSnakeColor();
+                }
+                else if (snake.head.IsWithinBounds(MapController.SIZE) && activeEffect == RAGE) {
+                    // hit an obstacle with rage up
+                    mapController.DestroyWall(snake.head);
                 }
                 else {
                     gameController.GameOver();
