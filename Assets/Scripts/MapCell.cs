@@ -14,6 +14,8 @@ public class MapCell : MonoBehaviour
     float timerStep = 1f / 6f;
 
     public bool isCollider = false;
+    public bool isTrap = false;
+    public bool isWarning = false;
     
     // Start is called before the first frame update
     void Start()
@@ -65,10 +67,25 @@ public class MapCell : MonoBehaviour
         // timer = 0f;
     }
 
-    public void PlaceWall()
+    public void PlaceTempWall()
     {
         ResetBasics();
         isCollider = true;
+        image.sprite = Resources.Load<Sprite>("tempwall");
+    }
+
+    public void PlacePermaWall()
+    {
+        ResetBasics();
+        isCollider = true;
+        image.sprite = Resources.Load<Sprite>("permawall");
+    }
+
+    public void PlaceWallWarning()
+    {
+        ResetBasics();
+        isWarning = true;
+        image.sprite = Resources.Load<Sprite>("redwarning");
     }
 
     void ResetBasics()
@@ -77,5 +94,7 @@ public class MapCell : MonoBehaviour
         transform.rotation = Quaternion.identity;
         animated = false;
         isCollider = false;
+        isTrap = false;
+        isWarning = false;
     }
 }

@@ -147,7 +147,8 @@ public class SnakeController : MonoBehaviour
 
             // check if collided with anything
             if (snake.head.x < 0 || snake.head.y < 0
-            || snake.head.x >= MapController.SIZE || snake.head.y >= MapController.SIZE) {
+            || snake.head.x >= MapController.SIZE || snake.head.y >= MapController.SIZE
+            || mapController.GetTile(snake.head).isCollider) {
                 if (activeEffect == GHOST) {
                     snake.head.ResetToWithinBounds(MapController.SIZE);
                     activeEffect = -1; // used up the effect

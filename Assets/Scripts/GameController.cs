@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour
     public void GameOver()
     {
         snakeController.ResetSnake();
-        mapController.ResetFood();
+        mapController.ResetMap();
         mapController.UpdateMap();
         // TODO disable snake/map controller and show some UI on score etc
         Debug.Log("collided");
