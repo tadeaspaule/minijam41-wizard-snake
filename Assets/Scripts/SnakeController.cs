@@ -62,8 +62,13 @@ public class SnakeController : MonoBehaviour
     
     #region Traps
 
-    string[] traps = new string[]{"speedup"};
+    string[] traps = new string[]{
+        "speedup",
+        "control-switch"
+    };
     const float SPEEDUP_DURATION = 4f;
+    const float CONTROL_SWITCH_DURATION = 3f;
+    int moveMult = 1;
 
     #endregion
     
@@ -89,6 +94,9 @@ public class SnakeController : MonoBehaviour
         // extra param resets
         activeEffect = -1;
         moveTimerExtra = 0f;
+        moveMult = 1;
+        snakeColor = Color.white;
+        UpdateSnakeColor();
     }
 
     void HandleSpellUse()
@@ -119,20 +127,42 @@ public class SnakeController : MonoBehaviour
     {
         if (trap.Equals("speedup")) {
             moveTimerExtra = -0.1f;
-            StartCoroutine(ResetMoveTimer(SPEEDUP_DURATION));
+            StartCoroutine(ResetMoveTimer());
+        }
+        else if (trap.Equals("control-switch")) {
+            moveMult = -1;
+            snakeColor = new Color(0f,0.3f,1f);
+            UpdateSnakeColor();
+            StartCoroutine(ResetMoveMult());
         }
     }
 
-    IEnumerator ResetMoveTimer(float delay)
+    IEnumerator ResetMoveTimer()
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(SPEEDUP_DURATION);
         moveTimerExtra = 0f;
+    }
+
+    IEnumerator ResetMoveMult()
+    {
+        yield return new WaitForSeconds(CONTROL_SWITCH_DURATION);
+        snakeColor = Color.white;
+        UpdateSnakeColor();
+        moveMult = 1;
     }
 
     void UpdateSnakeColor()
     {
         mapController.SetTileColor(snake.head,snakeColor);
         foreach (Point p in snake.body) mapController.SetTileColor(p,snakeColor);
+    }
+
+    int GetOppositeCode(int code)
+    {
+        if (code == UP) return DOWN;
+        if (code == DOWN) return UP;
+        if (code == RIGHT) return LEFT;
+        return RIGHT; 
     }
 
     // Update is called once per frame
@@ -147,8 +177,8 @@ public class SnakeController : MonoBehaviour
         for (int i = 0; i < 4; i++) {
             foreach (KeyCode kc in keys[i]) {
                 if (Input.GetKeyDown(kc) && IsValidDirection(directions[i])) {
-                    direction = directions[i];
-                    directionCode = directionCodes[i];
+                    direction = directions[i]*moveMult;
+                    directionCode = moveMult == 1 ? directionCodes[i] : GetOppositeCode(directionCodes[i]);
                     found = true;
                     break;
                 }
@@ -229,7 +259,7 @@ public class SnakeController : MonoBehaviour
 
     bool IsValidDirection(Vector2Int dir)
     {
-        return dir.x != lastDirection.x && dir.y != lastDirection.y;
+        return dir.x*moveMult != lastDirection.x && dir.y*moveMult != lastDirection.y;
     }
 
     void SetSnakeBody(int move, int prevMove, Point point)
