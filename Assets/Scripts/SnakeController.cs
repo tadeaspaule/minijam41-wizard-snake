@@ -13,6 +13,7 @@ public class SnakeController : MonoBehaviour
 
     float timer = 0f;
     float moveTimer = 0.2f;
+    float moveTimerExtra = 0f;
 
     Color snakeColor = Color.white;
 
@@ -59,6 +60,13 @@ public class SnakeController : MonoBehaviour
 
     #endregion
     
+    #region Traps
+
+    string[] traps = new string[]{"speedup"};
+    const float SPEEDUP_DURATION = 4f;
+
+    #endregion
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -77,6 +85,10 @@ public class SnakeController : MonoBehaviour
         moves.Add(directionCode);
         moves.Add(directionCode);
         moves.Add(directionCode);
+
+        // extra param resets
+        activeEffect = -1;
+        moveTimerExtra = 0f;
     }
 
     void HandleSpellUse()
@@ -101,6 +113,20 @@ public class SnakeController : MonoBehaviour
             }
             mapController.UpdateMap();
         }
+    }
+
+    void HandleTrap(string trap)
+    {
+        if (trap.Equals("speedup")) {
+            moveTimerExtra = -0.1f;
+            StartCoroutine(ResetMoveTimer(SPEEDUP_DURATION));
+        }
+    }
+
+    IEnumerator ResetMoveTimer(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        moveTimerExtra = 0f;
     }
 
     void UpdateSnakeColor()
@@ -130,7 +156,7 @@ public class SnakeController : MonoBehaviour
             if (found) break;
         }
         timer += Time.deltaTime;
-        if (timer >= moveTimer) {
+        if (timer >= moveTimer + moveTimerExtra) {
             lastDirection = direction;
             moves.Insert(0,directionCode);
             // move
@@ -164,6 +190,13 @@ public class SnakeController : MonoBehaviour
             if (snake.CollidingWithBody(snake.head)) {
                 gameController.GameOver();
                 return;
+            }
+
+            // check if stepped on trap
+            if (mapController.GetTile(snake.head).isTrap) {
+                Debug.Log("stepped on trap");
+                mapController.RemoveTrap(snake.head);
+                HandleTrap(traps[Random.Range(0,traps.Length)]);
             }
 
             // check if picked up spell

@@ -88,6 +88,20 @@ public class MapCell : MonoBehaviour
         image.sprite = Resources.Load<Sprite>("redwarning");
     }
 
+    public void PlaceTrap()
+    {
+        ResetBasics();
+        isTrap = true;
+        image.sprite = Resources.Load<Sprite>("trap");
+    }
+
+    public void PlaceTrapWarning()
+    {
+        ResetBasics();
+        isWarning = true;
+        image.sprite = Resources.Load<Sprite>("yellowwarning");
+    }
+
     void ResetBasics()
     {
         image.color = Color.white;

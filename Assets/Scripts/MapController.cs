@@ -20,15 +20,20 @@ public class MapController : MonoBehaviour
     float spellTimerCap = 5f;
     public Sprite spellSprite;
 
-    public Sprite wallSprite;
     List<Point> tempWalls = new List<Point>();
     List<Point> permaWalls = new List<Point>();
     List<Point> wallWarnings = new List<Point>();
     float tempWallTimer = 0f;
-    float tempWallTimerCap = 5f;
+    float tempWallTimerCap = 7f;
     float permaWallTimer = 0f;
-    float permaWallTimerCap = 10f;
+    float permaWallTimerCap = 12f;
     float wallWarningTime = 2f;
+
+    List<Point> traps = new List<Point>();
+    List<Point> trapWarnings = new List<Point>();
+    float trapTimer = 0f;
+    float trapTimerCap = 5f;
+    float trapWarningTime = 2f;
 
     public bool disabled = true;
     
@@ -62,6 +67,12 @@ public class MapController : MonoBehaviour
             PlanWallPlace(false);
         }
 
+        trapTimer += Time.deltaTime;
+        if (trapTimer >= trapTimerCap) {
+            trapTimer = 0f;
+            TrapSetup();
+        }
+
         if (spell != null) {
             // spell is placed, tick timer until it disappears
             spellTimer += Time.deltaTime;
@@ -82,6 +93,7 @@ public class MapController : MonoBehaviour
                 if (IsTileEmpty(x,y)) options.Add(new Point(x,y));
             }
         }
+        if (options.Count == 0) return null;
         return options[Random.Range(0,options.Count)];
     }
 
@@ -102,10 +114,13 @@ public class MapController : MonoBehaviour
         wallWarnings.Clear();
         tempWalls.Clear();
         permaWalls.Clear();
+        traps.Clear();
+        trapWarnings.Clear();
         spell = null;
         spellTimer = 0f;
         tempWallTimer = 0f;
         permaWallTimer = 0f;
+        trapTimer = 0f;
     }
 
     public void ResetFood()
@@ -130,6 +145,21 @@ public class MapController : MonoBehaviour
             Sprite sprite = Resources.Load<Sprite>($"spells/{placedSpell.name}");
             tiles[spell.x,spell.y].UpdateImage(sprite == null ? spellSprite : sprite);
         }
+    }
+
+    void TrapSetup()
+    {
+        Point p = GetUnoccupiedSpot();
+        if (p == null) return;
+        trapWarnings.Add(p);
+        StartCoroutine(TrapPlacement(p));
+    }
+
+    IEnumerator TrapPlacement(Point p)
+    {
+        yield return new WaitForSeconds(trapWarningTime);
+        traps.Add(p);
+        trapWarnings.RemoveAll(tw => tw.x == p.x && tw.y == p.y);
     }
 
     public void PlanWallPlace(bool isTemp)
@@ -214,6 +244,7 @@ public class MapController : MonoBehaviour
             Sprite sprite = Resources.Load<Sprite>($"spells/{placedSpell.name}");
             tiles[spell.x,spell.y].UpdateImage(sprite == null ? spellSprite : sprite);
         }
+
         foreach (Point p in tempWalls) {
             tiles[p.x,p.y].PlaceTempWall();
         }
@@ -222,6 +253,13 @@ public class MapController : MonoBehaviour
         }
         foreach (Point p in wallWarnings) {
             tiles[p.x,p.y].PlaceWallWarning();
+        }
+
+        foreach (Point p in traps) {
+            tiles[p.x,p.y].PlaceTrap();
+        }
+        foreach (Point p in trapWarnings) {
+            tiles[p.x,p.y].PlaceTrapWarning();
         }
     }
 
@@ -245,5 +283,10 @@ public class MapController : MonoBehaviour
     public MapCell GetTile(Point point)
     {
         return tiles[point.x,point.y];
+    }
+
+    public void RemoveTrap(Point point)
+    {
+        traps.RemoveAll(p => p.x == point.x && p.y == point.y);
     }
 }
