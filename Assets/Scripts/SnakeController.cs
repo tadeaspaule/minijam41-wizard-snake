@@ -52,6 +52,10 @@ public class SnakeController : MonoBehaviour
     public int activeEffect = -1;
     public static int GHOST = 0;
 
+    const int BLINK_DIST = 5;
+    Color BLINK_COL = new Color(0.8f,0.8f,1f,0.5f);
+
+    const int SHRINK_COUNT = 3;
 
     #endregion
     
@@ -79,6 +83,20 @@ public class SnakeController : MonoBehaviour
             activeEffect = GHOST;
             snakeColor = new Color(1f,1f,1f,0.5f);
             UpdateSnakeColor();
+        }
+        else if (spell.Equals("blink")) {
+            snake.head.x += lastDirection.x*BLINK_DIST;
+            snake.head.y += lastDirection.y*BLINK_DIST;
+            snake.head.ResetToWithinBounds(MapController.SIZE);
+            mapController.SetTile(snake.head,snakeHead,snakeColor,0,directionCode*90);
+            mapController.UpdateMap();
+        }
+        else if (spell.Equals("shrink")) {
+            int n = snake.body.Count;
+            for (int i = 0; i < SHRINK_COUNT && i < n; i++) {
+                snake.body.RemoveAt(snake.body.Count-1);
+            }
+            mapController.UpdateMap();
         }
     }
 
@@ -152,6 +170,14 @@ public class SnakeController : MonoBehaviour
             timer = 0f;
             mapController.UpdateMap();
             mapController.SetTile(snake.head,snakeHead,snakeColor,0,directionCode*90);
+            
+            // if holding blink, draw the "destination"
+            if (gameController.HoldingSpellName().Equals("blink")) {
+                Point p = new Point(snake.head.x+direction.x*BLINK_DIST,snake.head.y+direction.y*BLINK_DIST);
+                p.ResetToWithinBounds(MapController.SIZE);
+                mapController.SetTile(p,snakeHead,BLINK_COL,0,directionCode*90);
+            }
+            
             // update snake body sprites
             if (snake.body.Count > 1 && moves.Count > 2) {
                 SetSnakeBody(moves[0],moves[1],snake.body[0]);

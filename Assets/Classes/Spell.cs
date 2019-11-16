@@ -5,7 +5,9 @@ public class Spell
     public int cost;
 
     static Spell[] spells = new Spell[]{
-        new Spell("ghost",1)
+        new Spell("ghost",5),
+        new Spell("blink",5),
+        new Spell("shrink",5)
     };
 
     public Spell(string name, int cost)

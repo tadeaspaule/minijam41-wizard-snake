@@ -100,9 +100,14 @@ public class MapController : MonoBehaviour
     {
         for (int y = 0; y < SIZE; y++) {
             for (int x = 0; x < SIZE; x++) {
-                if (IsTileEmpty(x,y)) tiles[x,y].HideTile();
+                if (!snakeController.snake.InBody(x,y)) tiles[x,y].HideTile();
             }
         }
+        if (food != null) tiles[food.x,food.y].SetAsFood();
+        if (spell != null) {
+            Sprite sprite = Resources.Load<Sprite>($"spells/{placedSpell.name}");
+            tiles[spell.x,spell.y].UpdateImage(sprite == null ? spellSprite : sprite);
+        }        
     }
 
     public void SetTile(int x, int y, Sprite sprite, Color color, int yRotation, int zRotation)

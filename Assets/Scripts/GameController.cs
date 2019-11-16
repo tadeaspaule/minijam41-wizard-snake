@@ -78,6 +78,11 @@ public class GameController : MonoBehaviour
         return score >= holdingSpell.cost;
     }
 
+    public string HoldingSpellName()
+    {
+        return holdingSpell == null ? "" : holdingSpell.name;
+    }
+
     void UpdateSpellText()
     {
         if (holdingSpell == null) {
