@@ -34,6 +34,7 @@ public class MapController : MonoBehaviour
     float trapTimer = 0f;
     float trapTimerCap = 5f;
     float trapWarningTime = 2f;
+    float trapDisappearDelay = 12f;
 
     public bool disabled = true;
     
@@ -160,6 +161,13 @@ public class MapController : MonoBehaviour
         yield return new WaitForSeconds(trapWarningTime);
         traps.Add(p);
         trapWarnings.RemoveAll(tw => tw.x == p.x && tw.y == p.y);
+        StartCoroutine(TrapRemove(p));
+    }
+
+    IEnumerator TrapRemove(Point p)
+    {
+        yield return new WaitForSeconds(trapDisappearDelay);
+        traps.RemoveAll(tw => tw.x == p.x && tw.y == p.y);
     }
 
     public void PlanWallPlace(bool isTemp)
