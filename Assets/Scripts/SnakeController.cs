@@ -68,11 +68,14 @@ public class SnakeController : MonoBehaviour
 
     public void ResetSnake()
     {
-        int n = 3;
-        snake = new Snake(Random.Range(n,MapController.SIZE-n),Random.Range(n,MapController.SIZE-n));
+        snake = new Snake(7,12);
+        snake.body.Add(new Point(7,13));
+        snake.body.Add(new Point(7,14));
         moves.Clear();
         direction = directions[0];
         directionCode = directionCodes[0];
+        moves.Add(directionCode);
+        moves.Add(directionCode);
         moves.Add(directionCode);
     }
 
