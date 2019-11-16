@@ -70,6 +70,7 @@ public class GameController : MonoBehaviour
         score -= holdingSpell.cost;
         holdingSpell = null;
         UpdateSpellText();
+        UpdateScore();
     }
 
     public bool CanUseSpell()
