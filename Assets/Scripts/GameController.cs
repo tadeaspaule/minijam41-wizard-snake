@@ -30,6 +30,8 @@ public class GameController : MonoBehaviour
 
     public AudioClip blink;
     public AudioClip shrink;
+    public AudioClip rage;
+    public AudioClip ghost;
 
     public AudioClip timeSpeedup;
     public AudioClip timeSlowdown;
@@ -107,6 +109,12 @@ public class GameController : MonoBehaviour
         }
         else if (holdingSpell.name.Equals("shrink")) {
             audioSource.PlayOneShot(shrink);
+        }
+        else if (holdingSpell.name.Equals("ghost")) {
+            audioSource.PlayOneShot(ghost);
+        }
+        else if (holdingSpell.name.Equals("rage")) {
+            audioSource.PlayOneShot(rage);
         }
 
         holdingSpell = null;
