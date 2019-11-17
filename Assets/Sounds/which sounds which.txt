@@ -1,0 +1,5 @@
+Blink 		-> blink
+Hit - Damage 	-> destroying wall
+pickup		-> pickup
+Reverse Trap 3	-> reverse trap
+Time Effect 3	-> time trap

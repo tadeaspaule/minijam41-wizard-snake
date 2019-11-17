@@ -21,6 +21,21 @@ public class GameController : MonoBehaviour
     Color transparent = new Color(1f,1f,1f,0f);
 
     public AnimationClip intro;
+
+    #region Sounds
+
+    public AudioSource audioSource;
+
+    public AudioClip wallDestroy;
+
+    public AudioClip blink;
+    public AudioClip shrink;
+
+    public AudioClip timeSpeedup;
+    public AudioClip timeSlowdown;
+    public AudioClip controlReverse;
+
+    #endregion
     
     void Start()
     {
@@ -58,6 +73,24 @@ public class GameController : MonoBehaviour
         UpdateScore();
     }
 
+    public void DestroyedWall()
+    {
+        audioSource.PlayOneShot(wallDestroy);
+        score++;
+        UpdateScore();
+    }
+
+    public void SteppedOnTrap(string trap)
+    {
+        if (trap.Equals("speedup")) audioSource.PlayOneShot(timeSpeedup);
+        else if (trap.Equals("control-switch")) audioSource.PlayOneShot(controlReverse);
+    }
+
+    public void PlayTimeSlowdown()
+    {
+        audioSource.PlayOneShot(timeSlowdown);
+    }
+
     public void PickedUpSpell(Spell spell)
     {
         holdingSpell = spell;
@@ -68,9 +101,18 @@ public class GameController : MonoBehaviour
     public void UsedSpell()
     {
         score -= holdingSpell.cost;
+
+        if (holdingSpell.name.Equals("blink")) {
+            audioSource.PlayOneShot(blink);
+        }
+        else if (holdingSpell.name.Equals("shrink")) {
+            audioSource.PlayOneShot(shrink);
+        }
+
         holdingSpell = null;
         UpdateSpellText();
         UpdateScore();
+
     }
 
     public bool CanUseSpell()

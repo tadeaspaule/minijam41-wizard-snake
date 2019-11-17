@@ -147,6 +147,7 @@ public class SnakeController : MonoBehaviour
             UpdateSnakeColor();
             StartCoroutine(ResetMoveMult());
         }
+        gameController.SteppedOnTrap(trap);
     }
 
     IEnumerator ResetActiveEffect(float delay)
@@ -165,6 +166,7 @@ public class SnakeController : MonoBehaviour
     IEnumerator ResetMoveTimer()
     {
         yield return new WaitForSeconds(SPEEDUP_DURATION);
+        gameController.PlayTimeSlowdown();
         moveTimerExtra = 0f;
     }
 
@@ -238,6 +240,7 @@ public class SnakeController : MonoBehaviour
                 }
                 else if (snake.head.IsWithinBounds(MapController.SIZE) && activeEffect == RAGE) {
                     // hit an obstacle with rage up
+                    gameController.DestroyedWall();
                     mapController.DestroyWall(snake.head);
                 }
                 else {
