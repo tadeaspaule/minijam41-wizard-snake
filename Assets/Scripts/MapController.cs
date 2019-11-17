@@ -74,15 +74,12 @@ public class MapController : MonoBehaviour
             TrapSetup();
         }
 
-        if (spell != null) {
-            // spell is placed, tick timer until it disappears
-            spellTimer += Time.deltaTime;
-            if (spellTimer >= spellTimerCap) {
-                tiles[spell.x,spell.y].HideTile();
-                spell = null;
-                placedSpell = null;
-                StartCoroutine(DelayedSpellSpawn(2f));
-            }
+        spellTimer += Time.deltaTime;
+        if (spellTimer >= spellTimerCap) {
+            if (spell != null) tiles[spell.x,spell.y].HideTile();
+            spell = null;
+            placedSpell = null;
+            StartCoroutine(DelayedSpellSpawn(2f));
         }
     }
 
@@ -135,9 +132,10 @@ public class MapController : MonoBehaviour
         if (spell != null) {
             // have to reset spell vars
             tiles[spell.x,spell.y].HideTile();
-            spell = null;
-            placedSpell = null;
+            
         }
+        spell = null;
+        placedSpell = null;
         yield return new WaitForSeconds(delay);
         if (spell == null) {
             spellTimer = 0f;
