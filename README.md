@@ -1,5 +1,4 @@
 # minijam41-wizard-snake
-My submission for Mini Jam 41 (https://itch.io/jam/mini-jam-41-magic).
 
 A twist on the classical Snake game; there are potions you can drink for special effects, walls that spawn to block your path, and nasty traps to avoid!
 
