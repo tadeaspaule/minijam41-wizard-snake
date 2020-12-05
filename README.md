@@ -2,7 +2,7 @@
 
 A twist on the classical Snake game; there are potions you can drink for special effects, walls that spawn to block your path, and nasty traps to avoid!
 
-## Game restrictions
+## Game jam restrictions
 - Your game must take place in one screen (set by jam)
 - 128x128 resolution (set by me; was one of the options for the jam and I really liked it so here we go!)
 
